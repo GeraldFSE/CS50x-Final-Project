@@ -1,0 +1,97 @@
+.navbar1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.flash-message {
+    position: fixed;
+    top: 8.5%;
+    left: 35%;
+    right: 35%;
+    z-index: 999;
+}
+
+.alert1 {
+    opacity: 0;
+    transition: opacity 1s ease-in;
+}
+
+.alert1.fade-in {
+    opacity: 1;
+}
+
+.alert1.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+
+/* For index */
+
+@media (min-width: 390px){
+    .indexdate {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 350px;
+    }
+}
+
+.indexsubmit {
+    margin-left: 5%;
+}
+
+@media (max-width: 390px) {
+    .indexdate {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 200px;
+    }
+  }
+
+
+
+/* For barchart */
+
+@media (min-width: 991px){
+
+    .barchartform{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .barchartstartdate{
+        margin-left: 30%;
+    }
+
+    .barchartenddate{
+        margin-right: 30%;
+    }
+
+    .barchartsubmit{
+        margin-top: 100%;
+    }
+}
+
+@media (max-width: 991px){
+
+    .barchartstartdate{
+        width: 200px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .barchartenddate{
+        width: 200px;
+        margin-left: 8px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .barchartsubmit {
+        top: 60%;
+        margin-left: 60%;
+    }
+
+}

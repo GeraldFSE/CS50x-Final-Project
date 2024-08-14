@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Change Budget
+{% endblock %}
+
+{% block main %}
+    {% if not date %}
+        <h5>CHANGE REMAINING BUDGET FOR EXISITING MONTH /</h5>
+        <h5>CHANGE BUDGET FOR NEW MONTH</h5>
+        <div>What is your new budget?</div>
+        <div style="margin-bottom: 1%; font-size: 10px;">Note: Budget will be rounded to 2 decimal place</div>
+    {% else %}
+        <h3>ADD</h3>
+        <h5>BUDGET FOR NEW MONTH</h5>
+        <div>How much is your budget for</div>
+        <div style="margin-bottom: 1%;">{{ month}} {{ year }}</div>
+        <div style="margin-bottom: 1%; font-size: 10px;">Note: Budget will be rounded to 2 decimal place</div>
+    {% endif %}
+
+    <form action="/budget" method="POST">
+
+        {% if not date %}
+            <div class="mb-3">
+                <input class="form-control mx-auto w-auto" name="date" type="month">
+            </div>
+        {% else %}
+            <input name="date" type="hidden" value="{{ date }}">
+        {% endif %}
+
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="budget" placeholder="Enter your budget" type="number" step="any">
+        </div>
+
+        <button class="btn btn-primary" type="submit">Enter</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            async function checkDatabase(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                let response = await fetch('/check-database', {
+                    method: 'POST',
+                    body: new FormData(document.querySelector('form'))
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.error}`);
+                    return;
+                }
+
+                let result = await response.json();
+
+                if (result.exists) {
+                    if (confirm("Changing the REMAINING budget for an EXISITING month. Continue?")) {
+                        event.target.submit(); // Submit the form if confirmed
+                    }
+                } else {
+                    if (confirm("Adding a budget for a NEW month. Continue?")) {
+                        event.target.submit(); // Submit the form if confirmed
+                    } // Submit the form if no existing data
+                }
+
+            }
+
+            document.querySelector('form').onsubmit = checkDatabase;
+        });
+    </script>
+
+{% endblock %}

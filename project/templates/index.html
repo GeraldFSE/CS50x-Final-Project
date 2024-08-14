@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Budget Breakdown
+{% endblock %}
+
+{% block main %}
+    <div>
+        <div style="margin-bottom: 2%;">
+            <form action="/" method="POST">
+                <div class="indexdate">
+                    <div style="white-space: nowrap;">Month & Year:</div>
+                    <input class="form-control" name="date" type="month">
+                    <button class="btn btn-primary indexsubmit" type="submit">Enter</button>
+                </div>
+            </form>
+        </div>
+
+        {% if checker %}
+            <h3 style="margin-bottom: 1%;">{{ formatted_date }}</h3>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Total cost</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in breakdown %}
+                            <tr>
+                                <th scope="row">{{ item["day"] }}/{{ item["month"] }}/{{ item["year"] }}</th>
+                                <td>{{ item["title"] }}</td>
+                                <td>{{ item["description"] }}</td>
+                                <td>{{ item["cost"] }}</td>
+                                <td>
+                                    <form action="/editbreakdown" method="POST" style="display: inline-block;">
+                                        <input name="breakdownid" type="hidden" value="{{ item["breakdownid"] }}">
+                                        <input name="month" type="hidden" value="{{ item["month"] }}">
+                                        <input name="year" type="hidden" value="{{ item["year"] }}">
+                                        <button class="btn btn-warning" type="submit">Edit</button>
+                                    </form>
+                                    <form action="/deletebreakdown" method="POST" style="display: inline-block;">
+                                        <input name="breakdownid" type="hidden" value="{{ item["breakdownid"] }}">
+                                        <input name="month" type="hidden" value="{{ item["month"] }}">
+                                        <input name="year" type="hidden" value="{{ item["year"] }}">
+                                        <button class="btn btn-danger" type="submit">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-left: 70%; font-weight: bold;">Total spent: {{ totalspending }}</div>
+            <div style="margin-left: 70%; font-weight: bold;">Budget Left: {{ budget }}</div>
+            <div style="margin-left: 70%; font-weight: bold;">Grandtotal: {{ grandtotal }}</div>
+
+
+
+            <a href="/breakdown" class="btn btn-primary button">Add</a>
+
+        {% endif %}
+
+
+    </div>
+
+{% endblock %}

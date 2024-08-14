@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+
+        <!-- http://getbootstrap.com/docs/5.3/ -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        <link href="/static/Budget_Icon.png" rel="icon">
+
+        <link rel="stylesheet" href="static/styles.css">
+
+
+        <title>Budget: {% block title %}{% endblock %}</title>
+
+    </head>
+
+    <body class="bg-danger-subtle">
+
+        <div style="width: 100%;">
+            <nav class="navbar navbar-expand-lg navbar-light bg-info-subtle border border-success p-2 mb-2 border-opacity-25 rounded-3">
+                <!-- Navbar brand/logo if needed -->
+                <!-- <a class="navbar-brand" href="#">BrandName</a> -->
+                <a class="navbar-brand" href="/">
+                    <img src="/static/Budget_Icon.png" alt="Logo" width="20" height="24" class="d-inline-block align-text-top">
+                    Budget Tracker
+                </a>
+
+                <!-- Toggler/collapsible Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        {% if session["user_id"] %}
+                            <li class="nav-item">
+                                <a id="budgetbreakdown" class="nav-link" href="/">Budget Breakdown</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="changebudget" class="nav-link" href="/budget">Change/Add Budget</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="addbreakdown" class="nav-link" href="/breakdown">Add Breakdown</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="barchart" class="nav-link" href="/barchart">View Bar Chart</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="piechart" class="nav-link" href="/piechart">View Pie Chart</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="logout" class="nav-link" href="/logout">Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a id="login" class="nav-link" href="/login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="register" class="nav-link" href="/register">Register</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+
+
+
+
+        {% if get_flashed_messages() %}
+            <header class="container-fluid">
+                <div class="flash-message">
+                    <div class="alert alert-primary mb-0 text-center alert1" role="alert">
+                        {{ get_flashed_messages() | join(" ") }}
+                    </div>
+                </div>
+            </header>
+        {% endif %}
+
+
+        <main class="container py-5 text-center">
+            {% block main %}{% endblock %}
+        </main>
+
+        {% if session["user_id"] %}
+            <script>
+            // To change the basic nav when a button is pressed before login
+
+
+                function loginnavchange() {
+                    document.querySelector('#budgetbreakdown').style.backgroundColor = "";
+                    document.querySelector('#budgetbreakdown').style.border = "none";
+                    document.querySelector('#changebudget').style.backgroundColor = "";
+                    document.querySelector('#changebudget').style.border = "none";
+                    document.querySelector('#addbreakdown').style.backgroundColor = "";
+                    document.querySelector('#addbreakdown').style.border = "none";
+                    document.querySelector('#barchart').style.backgroundColor = "";
+                    document.querySelector('#barchart').style.border = "none";
+                    document.querySelector('#piechart').style.backgroundColor = "";
+                    document.querySelector('#piechart').style.border = "none";
+                    document.querySelector('#logout').style.backgroundColor = "";
+                    document.querySelector('#logout').style.border = "none";
+
+                }
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (window.location.pathname === '/') {
+                        console.log('Budget breakdown clicked');
+                        loginnavchange();
+                        document.querySelector('#budgetbreakdown').style.backgroundColor = "white";
+                        document.querySelector('#budgetbreakdown').style.borderRadius = "10px";
+
+                    } else if (window.location.pathname === '/budget') {
+                        console.log('Change budget clicked');
+                        loginnavchange();
+                        document.querySelector('#changebudget').style.backgroundColor = "white";
+                        document.querySelector('#changebudget').style.borderRadius = "10px";
+                    } else if (window.location.pathname === '/breakdown') {
+                        console.log('Add breakdown clicked');
+                        loginnavchange();
+                        document.querySelector('#addbreakdown').style.backgroundColor = "white";
+                        document.querySelector('#addbreakdown').style.borderRadius = "10px";
+                    } else if (window.location.pathname === '/barchart') {
+                        console.log('Barchart clicked');
+                        loginnavchange();
+                        document.querySelector('#barchart').style.backgroundColor = "white";
+                        document.querySelector('#barchart').style.borderRadius = "10px";
+                    } else if (window.location.pathname === '/piechart') {
+                        console.log('Piechart clicked');
+                        loginnavchange();
+                        document.querySelector('#piechart').style.backgroundColor = "white";
+                        document.querySelector('#piechart').style.borderRadius = "10px";
+                    } else if (window.location.pathname === '/logout') {
+                        console.log('Logout clicked');
+                        loginnavchange();
+                        document.querySelector('#logout').style.backgroundColor = "white";
+                        document.querySelector('#logout').style.borderRadius = "10px";
+                    }
+
+                });
+            </script>
+
+        {% else %}
+            <script>
+            // To change the basic nav when a button is pressed before login
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (window.location.pathname === '/login') {
+                        console.log('Login clicked');
+                        document.querySelector('#login').style.backgroundColor = "white";
+                        document.querySelector('#login').style.borderRadius = "10px";
+                        document.querySelector('#register').style.backgroundColor = "";
+                        document.querySelector('#register').style.border = "none";
+
+                    }
+
+                    if (window.location.pathname === '/register') {
+                        console.log('Register clicked');
+                        document.querySelector('#register').style.backgroundColor = "white";
+                        document.querySelector('#register').style.borderRadius = "10px";
+                        document.querySelector('#login').style.backgroundColor = "";
+                        document.querySelector('#login').style.border = "none";
+                    }
+
+                });
+            </script>
+        {% endif %}
+
+
+        <script>
+            //for flash messages
+
+            window.onload = function() {
+                var alert = document.querySelector('.alert1');
+                if (alert) {
+                    alert.classList.add('fade-in');
+                    setTimeout(function() {
+                        alert.classList.remove('fade-in');
+                        alert.classList.add('fade-out');
+                    }, 2000);
+                }
+            };
+
+            //for error messages, used to replace apology.html
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var errormessage = "{{ errormessage }}";
+                if (errormessage) {
+                    alert(errormessage);
+                }
+            });
+        </script>
+
+    </body>
+
+</html>

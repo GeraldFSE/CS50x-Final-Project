@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add breakdown
+{% endblock %}
+
+{% block main %}
+    <h5>ADD BREAKDOWN</h5>
+    <div style="margin-bottom: 1%; font-size: 10px;">Note: Budget will be rounded to 2 decimal place</div>
+
+    <form action="/breakdown" method="POST">
+        <div class="mb-3">
+            <label for="date">Month & Year:</label>
+            <input id="date" class="form-control mx-auto w-auto" name="date" type="date">
+        </div>
+
+        <div class="mb-3">
+            <label for="title">Breakdown Details:</label>
+            <input id="title" autocomplete="off" autofocus class="form-control mx-auto w-auto" name="title" placeholder="Title" type="text">
+        </div>
+        <div class="mb-3">
+            <textarea name="description" rows="5" cols="25" placeholder="Short Description">NIL</textarea>
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="cost" placeholder="Enter the cost" type="number" step="any">
+        </div>
+        <button class="btn btn-primary" type="submit">Enter</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            async function checkDatabase(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                let response = await fetch('/check-database1', {
+                    method: 'POST',
+                    body: new FormData(document.querySelector('form'))
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.error}`);
+                    return;
+                }
+
+                let result = await response.json();
+
+                if (result.exists) {
+                    event.target.submit(); // Submit the form if confirmed
+                } else {
+                    alert("New month detected! Add budget first before adding breakdown!");
+                }
+            }
+
+            document.querySelector('form').onsubmit = checkDatabase;
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Barchart
+{% endblock %}
+
+{% block main %}
+    <div>
+        <div style="margin-bottom: 2%;">
+            <form action="/barchart" method="POST" class="barchartform">
+                <div class="barchartstartdate">
+                    <div>Start:</div>
+                    <input class="form-control" name="start" type="month">
+                </div>
+                <div>
+                    <button class="btn btn-primary barchartsubmit" type="submit">Enter</button>
+                </div>
+                <div class="barchartenddate">
+                    <div>End:</div>
+                    <input class="form-control" name="end" type="month">
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('myChart').getContext('2d'); // Canvas context
+
+        // Initialize the chart with empty data
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Money spent each month',
+                        data: [],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            async function checkDatabase(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                try {
+                    const response = await fetch('/barchartdata', {
+                        method: 'POST',
+                        body: new FormData(document.querySelector('form'))
+                    });
+
+                // Check if response is ok
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        alert(`Error: ${errorData.error}`);
+                        return;
+                    }
+
+                    const data = await response.json();
+
+                    console.log('Received data:', data);
+
+                // Update the chart with new data
+                    chart.data.labels = data.date;
+                    chart.data.datasets[0].data = data.spend;
+                    chart.update();
+                } catch (error) {
+                    console.error('Error fetching data:', error); // Handle any other errors
+                }
+            }
+
+        // Set up the form submit event listener
+            document.querySelector('form').onsubmit = checkDatabase;
+        });
+    </script>
+
+{% endblock %}

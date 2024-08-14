@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Edit breakdown
+{% endblock %}
+
+{% block main %}
+    <h5 style="margin-bottom: 1%;">EDIT BREAKDOWN</h5>
+
+    <form action="/editbreakdown" method="POST">
+
+        <div class="mb-3">
+            <label for="title">Breakdown Details:</label>
+            <input id="title" autocomplete="off" autofocus class="form-control mx-auto w-auto" name="title" placeholder="Title" type="text">
+        </div>
+        <div class="mb-3">
+            <textarea name="description" rows="5" cols="25" placeholder="Short Description">NIL</textarea>
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="cost" placeholder="Enter the cost" type="number" step="any">
+        </div>
+        <input type="hidden" name="checker" value="yes">
+        <input type="hidden" name="breakdownid" value="{{ breakdownid }}">
+        <input type="hidden" name="month" value="{{ month }}">
+        <input type="hidden" name="year" value="{{ year }}">
+        <button class="btn btn-primary" type="submit">Enter</button>
+    </form>
+
+{% endblock %}
